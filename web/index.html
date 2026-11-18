@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Show Multiview</title>
+  <link rel="stylesheet" href="/css/multiview.css">
+</head>
+<body>
+  <header class="bar" id="bar">
+    <h1 class="bar__title" id="title">SHOW MULTIVIEW</h1>
+    <span class="bar__status" id="server-status" role="status">CONNECTING TO SERVER…</span>
+    <span class="bar__level" id="level" hidden></span>
+    <span class="bar__perf" id="perf"></span>
+    <button class="btn btn--pause" id="pause" type="button" aria-keyshortcuts="P">Pause Previews <kbd>P</kbd></button>
+  </header>
+
+  <main class="grid" id="grid">
+    <section class="clock" id="clock" aria-label="Clock and countdown">
+      <div class="clock__now" id="clock-now">--:--:--</div>
+      <div class="clock__countdown" id="countdown" data-mode="idle">--:--</div>
+      <div class="clock__controls">
+        <div class="clock__row">
+          <button class="btn" type="button" data-preset="5">5 min</button>
+          <button class="btn" type="button" data-preset="10">10 min</button>
+          <button class="btn" type="button" data-preset="15">15 min</button>
+          <form class="clock__field" id="custom-form">
+            <label for="custom-minutes">Minutes</label>
+            <input id="custom-minutes" type="number" min="0.1" max="1440" step="any" inputmode="decimal">
+            <button class="btn" type="submit">Set</button>
+          </form>
+          <form class="clock__field" id="target-form">
+            <label for="target-time">Count to</label>
+            <input id="target-time" type="time" required>
+            <button class="btn" type="submit">Go</button>
+          </form>
+        </div>
+        <div class="clock__row">
+          <button class="btn btn--primary" id="timer-start" type="button" aria-keyshortcuts="Space">Start <kbd>Space</kbd></button>
+          <button class="btn" id="timer-pause" type="button" aria-keyshortcuts="Space">Pause <kbd>Space</kbd></button>
+          <button class="btn" id="timer-reset" type="button" aria-keyshortcuts="R">Reset <kbd>R</kbd></button>
+          <span class="clock__message" id="timer-message" role="alert"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

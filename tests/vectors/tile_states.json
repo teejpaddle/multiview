@@ -1,0 +1,89 @@
+{
+  "thresholds": { "late_ms": 1000, "lost_ms": 3000, "restored_flash_ms": 3000 },
+  "scenarios": [
+    {
+      "name": "live, late, lost, restored by age",
+      "steps": [
+        { "t": 0, "expect": "CONNECTING" },
+        { "t": 100, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 1099, "source": "connected", "expect": "LIVE" },
+        { "t": 1100, "source": "connected", "expect": "LATE" },
+        { "t": 3099, "source": "connected", "expect": "LATE" },
+        { "t": 3100, "source": "connected", "expect": "NO_SIGNAL" },
+        { "t": 5000, "frame": true, "source": "connected", "expect": "RESTORED" },
+        { "t": 7999, "frame": true, "source": "connected", "expect": "RESTORED" },
+        { "t": 8000, "frame": true, "source": "connected", "expect": "LIVE" }
+      ]
+    },
+    {
+      "name": "server state overrides fresh frames",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 100, "frame": true, "source": "stalled", "expect": "LATE" },
+        { "t": 200, "frame": true, "source": "disconnected", "expect": "NO_SIGNAL" },
+        { "t": 300, "frame": true, "source": "connected", "expect": "RESTORED" }
+      ]
+    },
+    {
+      "name": "error state is lost",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 100, "source": "error", "expect": "NO_SIGNAL" }
+      ]
+    },
+    {
+      "name": "never connected",
+      "steps": [
+        { "t": 0, "source": "connecting", "expect": "CONNECTING" },
+        { "t": 2999, "source": "connecting", "expect": "CONNECTING" },
+        { "t": 3000, "source": "connecting", "expect": "NO_SIGNAL" },
+        { "t": 4000, "frame": true, "source": "connected", "expect": "RESTORED" }
+      ]
+    },
+    {
+      "name": "source reports lost before the first frame",
+      "steps": [
+        { "t": 0, "source": "disconnected", "expect": "NO_SIGNAL" }
+      ]
+    },
+    {
+      "name": "still and black are quiet indicators",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "static": true, "expect": "LIVE_STILL" },
+        { "t": 100, "frame": true, "source": "connected", "black": true, "expect": "LIVE_BLACK" },
+        { "t": 200, "frame": true, "source": "connected", "static": true, "black": true, "expect": "LIVE_BLACK" },
+        { "t": 300, "frame": true, "source": "connected", "expect": "LIVE" }
+      ]
+    },
+    {
+      "name": "pause and resume does not raise an alarm",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 100, "source": "connected", "paused": true, "expect": "PAUSED" },
+        { "t": 60000, "source": "paused", "paused": true, "expect": "PAUSED" },
+        { "t": 60100, "source": "paused", "expect": "CONNECTING" },
+        { "t": 60500, "frame": true, "source": "connected", "expect": "LIVE" }
+      ]
+    },
+    {
+      "name": "pausing a lost feed clears the loss",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 4000, "source": "disconnected", "expect": "NO_SIGNAL" },
+        { "t": 4100, "paused": true, "source": "disconnected", "expect": "PAUSED" },
+        { "t": 4200, "source": "connecting", "expect": "CONNECTING" },
+        { "t": 4300, "frame": true, "source": "connected", "expect": "LIVE" }
+      ]
+    },
+    {
+      "name": "server offline, then back",
+      "steps": [
+        { "t": 0, "frame": true, "source": "connected", "expect": "LIVE" },
+        { "t": 500, "source": "connected", "offline": true, "expect": "SERVER_OFFLINE" },
+        { "t": 9000, "source": "connected", "offline": true, "expect": "SERVER_OFFLINE" },
+        { "t": 9100, "source": "connecting", "expect": "NO_SIGNAL" },
+        { "t": 9500, "frame": true, "source": "connected", "expect": "RESTORED" }
+      ]
+    }
+  ]
+}

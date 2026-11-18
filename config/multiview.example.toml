@@ -1,0 +1,68 @@
+# Copy this file to config\multiview.toml and fill in the values marked SITE.
+
+[server]
+host = "127.0.0.1"            # never 0.0.0.0
+port = 8090
+log_dir = "logs"
+log_level = "INFO"
+
+[ui]
+title = "SHOW MULTIVIEW"
+clock_24h = false
+countdown_warn_s = 60         # amber in final N seconds
+countdown_overrun = "count_up_red"
+layout = "grid2x2"            # [Center][Side] / [PTZ][Clock]
+window_x = 0                  # SITE: multiview monitor x, from tools\list_monitors.py
+window_y = 0                  # SITE: multiview monitor y
+
+[health]                       # defaults, can be overridden per feed
+late_ms = 1000                 # amber
+lost_ms = 3000                 # red NO SIGNAL
+reconnect_interval_ms = 2000
+# 6 s, not 10 s: the retry wait plus camera start-up must fit test T2's 10 s restore limit.
+reconnect_max_interval_ms = 6000
+restored_flash_ms = 3000
+static_after_s = 10            # frames arriving but picture unchanged
+static_mad_threshold = 0.6     # mean abs diff on 64x36 luma, 0-255 scale
+black_luma_threshold = 10
+black_after_s = 3
+
+[perf]
+auto_degrade = true
+gpu_3d_high_pct = 85
+cpu_high_pct = 75
+sustain_s = 5
+recover_s = 30
+levels = [ {fps=30,q=75,scale=1.0}, {fps=15,q=70,scale=1.0},
+           {fps=10,q=65,scale=0.75}, {fps=5,q=60,scale=0.5} ]
+
+[audio.show]
+enabled = true
+source = "wasapi_loopback"
+device_match = "Speakers"      # SITE: part of Resolume's output device name
+attach_to_feed = "center"
+
+[[feed]]
+id = "center"
+label = "CENTER SCREEN"
+type = "spout"                 # spout | rtsp | synthetic
+spout.sender = "MV Center"     # SITE: exact name from tools\list_sources.py
+preview = { width = 1152, height = 536, fps = 30, jpeg_quality = 75 }
+
+[[feed]]
+id = "side"
+label = "SIDE SCREENS"
+type = "spout"
+spout.sender = "MV Side"       # SITE: exact name from tools\list_sources.py
+preview = { width = 960, height = 540, fps = 30, jpeg_quality = 75 }
+
+[[feed]]
+id = "ptz"
+label = "PTZ CAMERA"
+type = "rtsp"
+rtsp.url = "rtsp://192.168.100.88:554/2"   # SITE: the URL confirmed in VLC
+rtsp.transport = "tcp"
+rtsp.open_timeout_ms = 3000
+rtsp.read_timeout_ms = 2000
+rtsp.audio_meter = true        # meter the camera audio track if present
+preview = { width = 960, height = 540, fps = 30, jpeg_quality = 75 }

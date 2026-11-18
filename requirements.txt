@@ -1,0 +1,17 @@
+fastapi==0.164.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.3
+av==19.0.2
+glfw==2.11.0
+numpy==2.5.5
+simplejpeg==1.9.0
+psutil==7.2.2
+
+# Windows-only capture and metering
+SpoutGL==0.1.1; sys_platform == "win32"
+PyAudioWPatch==0.2.12.9; sys_platform == "win32"
+pywin32==312; sys_platform == "win32"
+
+# Tests
+pytest==9.2.0
+httpx==0.28.1

@@ -1,0 +1,30 @@
+# Scripted faults that walk the tiles through every health state on a repeating cycle.
+# python -m mvbridge --config config/multiview.faults.toml
+
+[server]
+port = 8090
+
+[audio.show]
+source = "synthetic"
+attach_to_feed = "center"
+
+[[feed]]
+id = "center"
+label = "CENTER: DROPOUT"
+type = "synthetic"
+synthetic = { background = [170, 24, 24], dropout_after_s = 6, dropout_for_s = 8, repeat_every_s = 24 }
+preview = { width = 1152, height = 536, fps = 30, jpeg_quality = 75 }
+
+[[feed]]
+id = "side"
+label = "SIDE: STALL + STILL"
+type = "synthetic"
+synthetic = { background = [24, 48, 170], motion = "vertical", stall_after_s = 4, stall_for_s = 2, freeze_picture_after_s = 10, freeze_picture_for_s = 16, repeat_every_s = 32 }
+preview = { width = 960, height = 540, fps = 30, jpeg_quality = 75 }
+
+[[feed]]
+id = "ptz"
+label = "PTZ: BLACK"
+type = "synthetic"
+synthetic = { background = [40, 44, 52], audio_meter = "no_track", black_picture_after_s = 5, black_picture_for_s = 8, repeat_every_s = 20 }
+preview = { width = 960, height = 540, fps = 30, jpeg_quality = 75 }

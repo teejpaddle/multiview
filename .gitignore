@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Site-specific and runtime files
+config/multiview.toml
+state/*
+!state/.gitkeep
+logs/*
+!logs/.gitkeep
+
+# Generated test clips
+test-clips/
+*.mov
+
+.claude/
+.DS_Store
