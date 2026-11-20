@@ -11,7 +11,6 @@
   --lost: #ff3b30;
   --paused: #4aa8ff;
   --idle: #7b8794;
-  --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "Cascadia Mono", Consolas, ui-monospace, Menlo, monospace;
   --bar-height: 40px;
   --gap: 6px;
@@ -26,7 +25,7 @@ html, body {
   overflow: hidden;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--sans);
+  font-family: var(--mono);
 }
 
 body {
@@ -54,8 +53,8 @@ kbd {
   white-space: nowrap;
 }
 
-.bar__title { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; }
-.bar__status { font-size: 13px; font-weight: 600; color: var(--muted); }
+.bar__title { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: 0.06em; }
+.bar__status { font-size: 14px; font-weight: 700; color: var(--muted); }
 .bar__status[data-ok="true"] { color: var(--live); }
 .bar__perf { margin-left: auto; font: 13px var(--mono); color: var(--muted); }
 
@@ -71,7 +70,7 @@ kbd {
 .bar[data-offline="true"] { background: var(--lost); border-color: var(--lost); }
 .bar[data-offline="true"] .bar__title,
 .bar[data-offline="true"] .bar__status { color: #fff; }
-.bar[data-offline="true"] .bar__status { font-size: 15px; font-weight: 800; }
+.bar[data-offline="true"] .bar__status { font-size: 15px; font-weight: 700; }
 
 /* Buttons and fields */
 .btn {
@@ -81,7 +80,7 @@ kbd {
   border-radius: 4px;
   background: var(--panel-raised);
   color: var(--text);
-  font: 600 14px var(--sans);
+  font: 700 14px var(--mono);
   cursor: pointer;
 }
 
@@ -143,7 +142,7 @@ input {
   background: #000;
   color: #fff;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.04em;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -187,7 +186,7 @@ input {
   background: var(--lost);
   color: #fff;
   font-size: clamp(26px, 4vw, 54px);
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
@@ -228,7 +227,7 @@ input {
   text-align: center;
 }
 
-.meter__name { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }
+.meter__name { font-size: 12px; font-weight: 700; }
 
 .meter__body { display: flex; gap: 3px; min-height: 0; }
 
@@ -259,7 +258,7 @@ input {
 .meter__value { font: 700 11px var(--mono); }
 
 .meter[data-state="off"] .meter__track { opacity: 0.25; }
-.meter[data-state="off"] .meter__value { color: var(--late); font: 700 10px/1.1 var(--sans); }
+.meter[data-state="off"] .meter__value { color: var(--late); font: 700 10px/1.1 var(--mono); }
 
 /* Clock */
 .clock {
@@ -295,10 +294,10 @@ input {
 
 .clock__controls { display: grid; gap: 6px; }
 .clock__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.clock__field { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); }
+.clock__field { display: flex; align-items: center; gap: 4px; font-size: 14px; color: var(--muted); }
 #custom-minutes { width: 64px; }
 #target-time { width: 112px; }
-.clock__message { color: var(--late); font-size: 13px; font-weight: 600; }
+.clock__message { color: var(--late); font-size: 14px; font-weight: 700; }
 
 @media (max-width: 1100px) {
   .tile__label { font-size: 15px; }
