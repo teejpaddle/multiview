@@ -1,4 +1,13 @@
 # Show-day start: protects Resolume, starts the bridge and opens the multiview window.
+# The shortcut runs this minimized, so every failure must end in a visible message box.
+
+function Show-Failure([string]$Message) {
+    Add-Type -AssemblyName PresentationFramework
+    [System.Windows.MessageBox]::Show($Message, 'Start Multiview') | Out-Null
+    exit 1
+}
+
+trap { Show-Failure "Start Multiview stopped unexpectedly:`n`n$_" }
 
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
@@ -7,16 +16,15 @@ Set-Location $Root
 $Python = Join-Path $Root '.venv\Scripts\python.exe'
 $Config = Join-Path $Root 'config\multiview.toml'
 
-function Show-Failure([string]$Message) {
-    Add-Type -AssemblyName PresentationFramework
-    [System.Windows.MessageBox]::Show($Message, 'Start Multiview') | Out-Null
-    exit 1
-}
-
 if (-not (Test-Path $Python)) { Show-Failure 'Run scripts\Install.ps1 first.' }
 
-$Window = & $Python -m mvbridge --config $Config --print-window 2>&1
-if ($LASTEXITCODE -ne 0) { Show-Failure "The configuration has a problem:`n`n$($Window -join "`n")" }
+# Windows PowerShell treats a program's error output as a script error when it is captured,
+# so a config problem would otherwise end this script before the message below is shown.
+$ErrorActionPreference = 'Continue'
+$Window = & $Python -m mvbridge --config $Config --print-window 2>&1 | ForEach-Object { "$_" }
+$ConfigExit = $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
+if ($ConfigExit -ne 0) { Show-Failure "The configuration has a problem:`n`n$($Window -join "`n")" }
 $WindowX, $WindowY, $Port = "$Window".Trim() -split '\s+'
 $Health = "http://127.0.0.1:$Port/healthz"
 
